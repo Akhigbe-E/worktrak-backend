@@ -171,6 +171,29 @@ const getTeam = (db, req, res) => {
         })
 }
 
+const getJoinedTeams = (db, req, res) => {
+    const { email } = req.params;
+    db.transaction(
+        trx => {
+            trx.select('team_id')
+                .from('team_membership')
+                .where('member_email', email)
+                .then(teamIDObjectsArray => {
+                    let teamIDs = teamIDObjectsArray.map(({ team_id }) => team_id)
+                    return trx.select('*')
+                        .from('projects')
+                        .whereIn('team_id', [...teamIDs])
+                        .then(data => {
+                            return res.status(200).json({ success: true, data: { teamIDs, teamProjects: data } })
+                        }).then(trx.commit)
+                        .catch(trx.rollback)
+                }).catch(err => {
+                    return res.status(400).json({ success: false, data: "Could not get joined teams" })
+                })
+        }
+    )
+}
+
 
 module.exports = {
     getProjectById, getTeamProjects, getAllProjects,
@@ -178,5 +201,5 @@ module.exports = {
     getProjectSections, getSection,
     getProjectComments,
     getAllMembers, getMember, getAssignedMembers, getTeamMembers,
-    getAllTeams, getTeam,
+    getAllTeams, getTeam, getJoinedTeams
 }

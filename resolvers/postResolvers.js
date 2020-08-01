@@ -5,18 +5,17 @@ const signJWTToken = (email) => {
     return jwt.sign({
         data: email,
         exp: Math.floor(Date.now() / 1000) + (60 * 60),
-    }, `MYJSON_WEB_TOKEN_SECRET`);
+    }, `WORKTRACK_SECRET_SECRET`);
 }
 
 const loginMember = (db, bcrypt, req, res) => {
-    console.log(req.body)
     const { email, password } = req.body;
-    if (email.trim() === '') return response.status(400).json({ success: false, message: "Kindly fill all fields" })
+    if (email.trim() === '') return res.status(400).json({ success: false, message: "Kindly fill all fields" })
     db.select('*')
         .from('members')
         .where('email', email)
         .then(data => {
-            if (data.length !== 1) return response.status(400).json({ success: false, message: "unable to log in" })
+            if (data.length !== 1) return res.status(400).json({ success: false, message: "Invalid email or password" })
             // const isValid = bcrypt.compareSync(password, data[0].password)
             const isValid = password === data[0].password
             if (isValid) {
@@ -36,13 +35,13 @@ const loginMember = (db, bcrypt, req, res) => {
             }
         }).catch(err => {
             console.log(err)
-            return response.status(400).json("Login not successfu;")
+            return response.status(400).json("Login not successful")
         })
 }
 
 const createTeam = (db, req, res) => {
     const { name, description } = req.body
-    if (name.trim() === "") return response.status(400).json({ success: false, message: "Kindly fill all fields" })
+    if (name.trim() === "") return res.status(400).json({ success: false, message: "Kindly fill all fields" })
     db('teams')
         .insert({ name, description })
         .returning('*')
@@ -61,7 +60,7 @@ const createTeam = (db, req, res) => {
 
 const createProject = (db, req, res) => {
     const { name, description, team_id, status, creator_email, privacy, board } = req.body
-    if (name.trim() === "") return response.status(400).json({ success: false, message: "Kindly fill all fields" })
+    if (name.trim() === "") return res.status(400).json({ success: false, message: "Kindly fill all fields" })
     db.transaction(
         trx => {
             trx.insert({ name, description, team_id, status, creator_email, privacy, board })

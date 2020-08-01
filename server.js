@@ -36,7 +36,7 @@ const {
     getAllMembers, getMember, getAssignedMembers, getTeamMembers,
 
     // Team GET Resolvers
-    getAllTeams, getTeam
+    getAllTeams, getTeam, getJoinedTeams,
 } = require('./resolvers/getResolvers')
 
 const {
@@ -126,6 +126,12 @@ app.get('/teams', (req, res) => { getAllTeams(db, req, res) })
 
 // Get all teams
 app.get('/team/:id', (req, res) => { getTeam(db, req, res) })
+
+// Get all teams
+app.get('/joinedteams/:email', requireAuth, (req, res) => { getJoinedTeams(db, req, res) })
+
+// Get all favourited projects using member email
+app.get('/favouritedprojects/:email', requireAuth, (req, res) => { getFavouritedProjects(db, req, res) })
 
 
 

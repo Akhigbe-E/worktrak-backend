@@ -15,11 +15,12 @@ const app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
-app.use(cors(
-    {
-        origin: 'https://proflowapp.herokuapp.com'
-    }
-));
+app.use(cors());
+// app.use(cors(
+//     {
+//         origin: 'https://proflowapp.herokuapp.com'
+//     }
+// ));
 
 
 //Resolvers
@@ -28,7 +29,7 @@ const {
     getAllProjects, getProjectById, getTeamProjects, getMemberProjects,
 
     //Task GET Resolvers
-    getPersonalTasks, getTasksBySectionsAndProjectId, getTaskById, getTasksByIds, getFavouritedProjects,
+    getPersonalTasks, getTasksBySectionsAndProjectId, getTaskById, getTasksByEmail, getFavouritedProjects,
 
 
     //Section GET Resolvers
@@ -108,7 +109,7 @@ app.get('/task/:id', requireAuth, (req, res) => { getTaskById(db, req, res) })
 
 
 //Get tasks by ids
-app.get('/tasksbyids/:email', requireAuth, (req, res) => { getTasksByIds(db, req, res) })
+app.get('/tasksbyemail/:email', requireAuth, (req, res) => { getTasksByEmail(db, req, res) })
 
 //Get tasks by member id
 app.get('/personaltasks/:email', requireAuth, (req, res) => { getPersonalTasks(db, req, res) })

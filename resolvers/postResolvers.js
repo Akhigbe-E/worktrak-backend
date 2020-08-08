@@ -60,6 +60,7 @@ const createTeam = (db, req, res) => {
 
 const createProject = (db, req, res) => {
     const { name, description, team_id, status, creator_email, privacy, board } = req.body
+    console.log(req.body)
     if (name.trim() === "") return res.status(400).json({ success: false, message: "Kindly fill all fields" })
     db.transaction(
         trx => {
@@ -78,7 +79,6 @@ const createProject = (db, req, res) => {
                     }
                     return res.status(201).json(response)
                 }).catch(err => {
-                    console.log(err)
                     return res.status(400).json("Could not create project")
                 })
         }
@@ -91,11 +91,11 @@ const createSection = (db, req, res) => {
     db('sections')
         .insert({ name, project_id })
         .returning('*')
-        .then(team => {
+        .then(sections => {
             const response = {
                 success: true,
                 message: "Section successfully created",
-                data: team
+                data: sections
             }
             return res.status(201).json(response)
         }).catch(err => {

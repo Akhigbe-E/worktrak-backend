@@ -197,8 +197,8 @@ const getAssignedMembers = (db, req, res) => {
     db.select('member_email')
         .from('task_assignee')
         .where('task_id', parseInt(id, 10))
-        .then(memberEmails => {
-            return res.status(200).json({ success: true, memberEmails })
+        .then(data => {
+            return res.status(200).json({ success: true, data })
         }).catch(err => {
             return res.status(400).json({ success: false, data: "Could not get assigned members" })
         })

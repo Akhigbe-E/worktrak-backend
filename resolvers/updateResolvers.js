@@ -1,6 +1,6 @@
 const updateTask = (db, req, res) => {
     const { id, title, description, completed, due_date, section_id } = req.body;
-    if (title.trim() === "" || description.trim() === "" || completed === "" || due_date.trim() === "") {
+    if (title.trim() === "" || completed === "") {
         return res.status(400).json({ success: false, message: "Fill up the fields" })
     }
     db('tasks')
@@ -30,7 +30,7 @@ const updateSection = (db, req, res) => {
 
 const updateProject = (db, req, res) => {
     const { project_id, name, description, status, privacy } = req.body;
-    if (name.trim() === "" || description.trim() === "" || status.trim() === "" || privacy.trim() === "") {
+    if (name.trim() === "" || status.trim() === "" || privacy.trim() === "") {
         return res.status(400).json({ success: false, message: "Fill up the fields" })
     }
     db('projects')

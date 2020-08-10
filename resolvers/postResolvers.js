@@ -5,7 +5,7 @@ const signJWTToken = (email) => {
     return jwt.sign({
         data: email,
         exp: Math.floor(Date.now() / 1000) + (60 * 60),
-    }, `WORKTRACK_SECRET_SECRET`);
+    }, `${process.env.SECRET}`);
 }
 
 const loginMember = (db, bcrypt, req, res) => {
